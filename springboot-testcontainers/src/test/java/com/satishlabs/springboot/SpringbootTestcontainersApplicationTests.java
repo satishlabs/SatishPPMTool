@@ -14,6 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 
 import java.util.List;
@@ -21,8 +24,11 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Testcontainers
 class SpringbootTestcontainersApplicationTests {
 
+    @Container
+    private static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest");
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -31,6 +37,10 @@ class SpringbootTestcontainersApplicationTests {
     //  given/when/then format - BDD Style
     @Test
     public void givenStudent_whenGetAllStudents_thenListOfStudents() throws Exception {
+        System.out.println(mySQLContainer.getDatabaseName());
+        System.out.println(mySQLContainer.getUsername());
+        System.out.println(mySQLContainer.getPassword());
+        System.out.println(mySQLContainer.getJdbcUrl());
         //given - setup or precondtion
         List<Student> students =
                 List.of(Student.builder().firstName("Satish").lastName("Prasad").email("sat@gmail").build(),
